@@ -8,7 +8,16 @@ class PlacesController < ApplicationController
     @hash = Gmaps4rails.build_markers(@places) do |place, marker|
       marker.lat place.latitude
       marker.lng place.longitude
-      marker.json({title: place.name})
+      marker.infowindow place.name
+    end
+  end
+
+  def infowindow
+    @places = Place.all
+    @hash = Gmaps4rails.build_markers(@places) do |place, marker|
+      marker.lat place.latitude
+      marker.lng place.longitude
+      marker.infowindow render_to_string(partial: "places/infowindow", locals: { place: place })
     end
   end
 
